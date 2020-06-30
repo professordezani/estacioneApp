@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "1070657714307",
+    "firebase_url": "https://appcatraca-75f27.firebaseio.com",
+    "project_id": "appcatraca-75f27",
+    "storage_bucket": "appcatraca-75f27.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1070657714307:android:ffd99566433e5ec93ec3b6",
+        "android_client_info": {
+          "package_name": "cranchi.com.br"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1070657714307-2hj16044kjkl6nar6n13t49007dabtpp.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "cranchi.com.br",
+            "certificate_hash": "9eca67ae96bac39d228167331f2d9acde7f7abc9"
+          }
+        },
+        {
+          "client_id": "1070657714307-jt9ov4l7kebpinr6m79cp4vc7n3q0mnp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDTgvGwjFPjx7KSzwFaEXTHJkD9rBgDGKM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1070657714307-jt9ov4l7kebpinr6m79cp4vc7n3q0mnp.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
