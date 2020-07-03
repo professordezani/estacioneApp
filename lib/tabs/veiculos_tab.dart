@@ -19,17 +19,16 @@ class VeiculosTile extends StatelessWidget {
       builder: (contex, snapshot) {
         if(!snapshot.hasData) return Center(child: CircularProgressIndicator(),);
         return Container(
-          child: ListView.builder(
-            scrollDirection: Axis.vertical,
-            shrinkWrap: true,
-            itemCount: snapshot.data.documents.length,
-            itemBuilder: (context, index) {
-              return VeiculoTile(VeiculoData.fromDocuments(snapshot.data.documents[index]));
-            },
-          )
+            child: ListView.builder(
+              scrollDirection: Axis.vertical,
+              shrinkWrap: true,
+              itemCount: snapshot.data.documents.length,
+              itemBuilder: (context, index) {
+                return VeiculoTile(VeiculoData.fromDocuments(snapshot.data.documents[index]));
+              },
+            )
         );
       },
     );
   }
 }
-

@@ -14,21 +14,14 @@ class MyApp extends StatelessWidget {
       model: UserModel(),
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        home: FutureBuilder<QuerySnapshot>(
-          future: Firestore.instance.collection("places").getDocuments(),
-          builder: (context, snapshot) {
-            return ScopedModelDescendant<UserModel>(
-                builder: (context, child, model) {
-                  if (!model.isLoggedIn())
-                    return LoginScreen();
-                  else
-                    return DashboardScreen();
-                });
-          },
-        )
-        ,
-      )
-      ,
+        home:
+            ScopedModelDescendant<UserModel>(builder: (context, child, model) {
+          if (!model.isLoggedIn())
+            return LoginScreen();
+          else
+            return DashboardScreen();
+        }),
+      ),
     );
   }
 }

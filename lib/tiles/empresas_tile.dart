@@ -1,4 +1,4 @@
-import 'package:br/tiles/veiculos_tile.dart';
+import 'file:///D:/app/catraca_app/lib/tabs/veiculos_tab.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
@@ -39,4 +39,3 @@ class EmpresasTile extends StatelessWidget {
   }
 
 }
-
