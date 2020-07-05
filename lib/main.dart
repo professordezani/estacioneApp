@@ -1,6 +1,5 @@
 import 'package:br/screens/dashboard_screen.dart';
 import 'package:br/screens/login_screen.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:br/models/user_model.dart';
 import 'package:scoped_model/scoped_model.dart';

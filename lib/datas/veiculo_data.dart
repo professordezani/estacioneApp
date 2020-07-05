@@ -8,6 +8,7 @@ class VeiculoData {
   String entrada;
   String saida;
   String tempo;
+  String empresa;
   bool veiculoStatus;
 
   VeiculoData.fromDocuments(DocumentSnapshot snapshot){
@@ -15,6 +16,7 @@ class VeiculoData {
     placa = snapshot.data["placa"];
     entrada = snapshot.data["entrada"];
     saida = snapshot.data["saida"];
+    empresa = snapshot.data["empresa"];
     tempo = snapshot.data["tempo"];
     veiculoStatus = snapshot.data["veiculoStatus"];
   }
@@ -24,6 +26,7 @@ class VeiculoData {
       'placa': placa,
       'entrada': entrada,
       'saida': saida,
+      'empresa': empresa,
       'tempo': tempo,
       'veiculoStatus': veiculoStatus
     };

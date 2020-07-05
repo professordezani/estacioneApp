@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 class VeiculoTile extends StatefulWidget {
-
   final VeiculoData veiculo;
 
   VeiculoTile(this.veiculo);
@@ -13,7 +12,6 @@ class VeiculoTile extends StatefulWidget {
 }
 
 class _VeiculoTileState extends State<VeiculoTile> {
-
   final VeiculoData veiculo;
 
   _VeiculoTileState(this.veiculo);
@@ -61,7 +59,8 @@ class _VeiculoTileState extends State<VeiculoTile> {
 
   void _setStopwatchText() {
     _stopwatchText =
-        (_stopWatch.elapsed.inMinutes % 60).toString().padLeft(2, '0') + ':' +
+        (_stopWatch.elapsed.inMinutes % 60).toString().padLeft(2, '0') +
+            ':' +
             (_stopWatch.elapsed.inSeconds % 60).toString().padLeft(2, '0');
   }
 
@@ -69,13 +68,13 @@ class _VeiculoTileState extends State<VeiculoTile> {
   Widget build(BuildContext context) {
     final now = DateTime.now();
     final clock =
-    Stream<DateTime>.periodic(const Duration(seconds: 1), (count) {
+        Stream<DateTime>.periodic(const Duration(seconds: 1), (count) {
       return now.add(Duration(seconds: count));
     });
     return Card(
         elevation: 3,
         child: Padding(
-          padding: EdgeInsets.fromLTRB(0, 10, 5, 10),
+          padding: EdgeInsets.fromLTRB(0, 10, 10, 10),
           child: Row(
             children: <Widget>[
               Icon(
@@ -93,76 +92,85 @@ class _VeiculoTileState extends State<VeiculoTile> {
                     Text(
                       veiculo.saida,
                       style:
-                      TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                          TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
                     ),
                   ],
                 ),
               ),
-              SizedBox(
-                width: 20,
-              ),
-              Text(
-                veiculo.placa,
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
-              SizedBox(
-                width: 10,
-              ),
-              veiculo.veiculoStatus
-                  ? Row(
-                children: <Widget>[
-                  Container(
-                    padding: EdgeInsets.all(11),
-                    decoration: BoxDecoration(
-                      color: Colors.blueAccent,
-                      borderRadius: new BorderRadius.only(
-                        topLeft: const Radius.circular(5),
-                        bottomLeft: const Radius.circular(5),
-                      ),
-                    ),
-                    child: Row(
-                      children: <Widget>[
-                        Icon(
-                          Icons.access_time,
-                          color: Colors.white,
-                          size: 14,
-                        ),
-                        SizedBox(
-                          width: 10,
-                        ),
-                        StreamBuilder<DateTime>(
-                          stream: clock,
-                          builder: (context, snapshot) {
-                            return Text(
-                              _stopwatchText,
-                              style: TextStyle(
-                                  fontSize: 12, color: Colors.white),
-                            );
-                          },
-                        )
-                      ],
-                    ),
-                  ),
-                ],
-              )
-                  : Container(),
-
+              Expanded(child: Container(),),
               Container(
-                child: FlatButton(
-                    color: Colors.lightBlueAccent,
-                    textColor: Colors.white,
-                    padding: EdgeInsets.all(0),
-                    child: Center(
-                      child: Text(
-                        !veiculo.veiculoStatus ? 'Entrada' : 'Saida',
-                        style: TextStyle(fontSize: 13),
+                child: Column(
+                  children: <Widget>[
+                    Text(
+                      veiculo.placa,
+                      style: TextStyle(
+                          fontSize: 14, fontWeight: FontWeight.bold),
+                    ),
+                    Text(
+                      veiculo.empresa,
+                      style: TextStyle(fontSize: 12),
+                    ),
+                  ],
+                ),
+              ),
+              Expanded(
+                child: Container(),
+              ),
+              Opacity(
+                  opacity: veiculo.veiculoStatus ? 1 : 0,
+                  child: Row(
+                    children: <Widget>[
+                      Container(
+                        padding: EdgeInsets.all(11),
+                        decoration: BoxDecoration(
+                          color: Colors.blueAccent,
+                          borderRadius: new BorderRadius.only(
+                            topLeft: const Radius.circular(5),
+                            bottomLeft: const Radius.circular(5),
+                          ),
+                        ),
+                        child: Row(
+                          children: <Widget>[
+                            Icon(
+                              Icons.access_time,
+                              color: Colors.white,
+                              size: 14,
+                            ),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            StreamBuilder<DateTime>(
+                              stream: clock,
+                              builder: (context, snapshot) {
+                                return Text(
+                                  _stopwatchText,
+                                  style: TextStyle(
+                                      fontSize: 12, color: Colors.white),
+                                );
+                              },
+                            )
+                          ],
+                        ),
                       ),
-                    ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(0),
-                    ),
-                    onPressed: _startStopButtonPressed
-
+                    ],
+                  )),
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Container(
+                  child: FlatButton(
+                      color: Colors.lightBlueAccent,
+                      textColor: Colors.white,
+                      padding: EdgeInsets.all(0),
+                      child: Center(
+                        child: Text(
+                          !veiculo.veiculoStatus ? 'Entrada' : 'Saida',
+                          style: TextStyle(fontSize: 13),
+                        ),
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(0),
+                      ),
+                      onPressed: _startStopButtonPressed),
                 ),
               ),
             ],
