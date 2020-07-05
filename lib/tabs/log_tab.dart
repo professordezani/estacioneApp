@@ -32,10 +32,18 @@ class LogTab extends StatelessWidget {
                   SizedBox(
                     width: 7,
                   ),
-                  Container(width: 1,height: 10, color: Colors.grey,),
+                  Container(
+                    width: 1,
+                    height: 30,
+                    color: Colors.grey,
+                  ),
                 ],
               ),
               LogContainer(),
+              LogContainer(),
+              LogContainer(),
+              LogContainer(),
+
               Row(
                 children: <Widget>[
                   Container(
@@ -63,7 +71,11 @@ class LogContainer extends StatelessWidget {
       children: <Widget>[
         Column(
           children: <Widget>[
-            Container(width: 1,height: 30, color: Colors.grey,),
+            Container(
+              width: 1,
+              height: 30,
+              color: Colors.grey,
+            ),
             Container(
               alignment: Alignment.center,
               height: 15,
@@ -73,7 +85,11 @@ class LogContainer extends StatelessWidget {
                 shape: BoxShape.circle,
               ),
             ),
-            Container(width: 1,height: 30, color: Colors.grey,),
+            Container(
+              width: 1,
+              height: 30,
+              color: Colors.grey,
+            ),
           ],
         ),
         SizedBox(
@@ -151,12 +167,10 @@ class LogContainer extends StatelessWidget {
         Expanded(
           child: Container(),
         ),
-
       ],
     );
   }
 }
-
 
 /*Row(
 children: <Widget>[
