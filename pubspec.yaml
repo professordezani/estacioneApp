@@ -39,6 +39,7 @@ dependencies:
   flutter_dash: ^0.0.1
   bubble_showcase: ^0.2.0+3
   speech_bubble: ^0.0.6
+  flutter_switch: ^0.0.2
 
 dev_dependencies:
   flutter_test:
