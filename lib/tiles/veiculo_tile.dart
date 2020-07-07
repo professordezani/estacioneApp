@@ -1,5 +1,6 @@
-import 'package:br/models/vehicle.dart';
 import 'dart:async';
+import 'package:br/models/vehicle.dart';
+import '../endpoints/vehicle_api.dart';
 import 'package:flutter/material.dart';
 
 class VeiculoTile extends StatefulWidget {
@@ -15,6 +16,7 @@ class VeiculoTile extends StatefulWidget {
 class _VeiculoTileState extends State<VeiculoTile> {
   final String nomeEmpresa;
   final Vehicle veiculo;
+  var vehicleApi = VehicleApi();
   
   _VeiculoTileState(this.nomeEmpresa, this.veiculo);
 
@@ -22,6 +24,24 @@ class _VeiculoTileState extends State<VeiculoTile> {
   String _stopwatchText = '00:00';
   final _stopWatch = new Stopwatch();
   final _timeout = const Duration(seconds: 1);
+
+  void register() async {
+    try {
+      if (!veiculo.lastRecord.onGarage) {
+        var moment = await vehicleApi.arrival(veiculo.id);
+        veiculo.lastRecord.moment = moment;
+        veiculo.lastRecord.onGarage = false;
+        _startStopButtonPressed();
+      } else {
+        var moment = await vehicleApi.departure(veiculo.id);
+        veiculo.lastRecord.moment = moment;
+        veiculo.lastRecord.onGarage = true;
+        _startStopButtonPressed();
+      }
+    } catch (ex) {
+
+    }
+  }
 
   void _startTimeout() {
     new Timer(_timeout, _handleTimeout);
@@ -81,7 +101,7 @@ class _VeiculoTileState extends State<VeiculoTile> {
             children: <Widget>[
               Icon(
                 veiculo.lastRecord.onGarage ? Icons.arrow_right : Icons.arrow_left,
-                color: veiculo.lastRecord.onGarage ? Colors.red : Colors.green,
+                color: veiculo.lastRecord.onGarage ? Colors.green : Colors.red,
                 size: 35,
               ),
               Container(
@@ -172,7 +192,7 @@ class _VeiculoTileState extends State<VeiculoTile> {
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(0),
                       ),
-                      onPressed: _startStopButtonPressed),
+                      onPressed: register),
                 ),
               ),
             ],
