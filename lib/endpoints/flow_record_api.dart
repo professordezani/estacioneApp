@@ -14,7 +14,9 @@ class FlowRecordApi {
 
     if (response.statusCode == 200) {
       var data = json.decode(response.body);
-      return List.from(data['items']).map((e) => FlowRecord.fromJson(e)).toList();
+      return List.from(data['items']).map((e) {
+        FlowRecord.fromJson(e);
+      }).toList();
 
     } else {
       throw Exception('Falha ao carregar histórico');

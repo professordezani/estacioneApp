@@ -8,6 +8,20 @@ import 'package:http/http.dart' as http;
 
 class CompanyApi {
 
+  Future<Company> getCompany(String id) async {
+    final response = await http.get('https://flux-control-node-api.herokuapp.com/company/get/' + id,
+      headers: {
+        'authorization': "bearer " + UserApi.token
+      }
+    );
+
+    if (response.statusCode == 200) {
+      return Company.fromJson(json.decode(response.body));
+    } else {
+      throw Exception('Failed to load company');
+    }
+  }
+
   Future<List<Company>> getCompanies() async {
     final response = await http.get('https://flux-control-node-api.herokuapp.com/api/companies',
       headers: {'authorization': "Bearer " + UserApi.token}

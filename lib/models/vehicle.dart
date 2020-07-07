@@ -17,7 +17,7 @@ class Vehicle {
   String id;
   int number;
   String licensePlate;
-  int companyId;
+  String companyId;
   LastRecord lastRecord;
   DateTime createdAt;
   bool inactive;
@@ -29,7 +29,7 @@ class Vehicle {
       id: json['id'].toString(),
       number: json['number'],
       licensePlate: json['license_plate'],
-      companyId: json['company_id'],
+      companyId: json['company_id'].toString(),
       lastRecord: LastRecord.fromJson(json['last_record']),
       createdAt: DateTime.parse(json['created_at']),
       inactive: json['inactive'] == 1 ? true : false

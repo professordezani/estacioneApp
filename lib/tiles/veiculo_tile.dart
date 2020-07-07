@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:intl/intl.dart';
 import 'package:br/models/vehicle.dart';
 import '../endpoints/vehicle_api.dart';
 import 'package:flutter/material.dart';
@@ -15,75 +16,51 @@ class VeiculoTile extends StatefulWidget {
 
 class _VeiculoTileState extends State<VeiculoTile> {
   final String nomeEmpresa;
-  final Vehicle veiculo;
+  final Vehicle _veiculo;
+  Duration _current;
   var vehicleApi = VehicleApi();
   
-  _VeiculoTileState(this.nomeEmpresa, this.veiculo);
+  _VeiculoTileState(this.nomeEmpresa, this._veiculo);
 
-  bool _isStart = true;
-  String _stopwatchText = '00:00';
-  final _stopWatch = new Stopwatch();
-  final _timeout = const Duration(seconds: 1);
-
-  void register() async {
-    try {
-      if (!veiculo.lastRecord.onGarage) {
-        var moment = await vehicleApi.arrival(veiculo.id);
-        veiculo.lastRecord.moment = moment;
-        veiculo.lastRecord.onGarage = false;
-        _startStopButtonPressed();
-      } else {
-        var moment = await vehicleApi.departure(veiculo.id);
-        veiculo.lastRecord.moment = moment;
-        veiculo.lastRecord.onGarage = true;
-        _startStopButtonPressed();
-      }
-    } catch (ex) {
-
-    }
-  }
-
-  void _startTimeout() {
-    new Timer(_timeout, _handleTimeout);
-  }
-
-  void _handleTimeout() {
-    if (_stopWatch.isRunning) {
-      _startTimeout();
-    }
-    setState(() {
-      _setStopwatchText();
+  void register() {
+    setState(() async {
+      try {
+        if (!_veiculo.lastRecord.onGarage) {
+          var moment = await vehicleApi.arrival(_veiculo.id);
+          _veiculo.lastRecord.moment = moment;
+          _veiculo.lastRecord.onGarage = true;
+        } else {
+          var moment = await vehicleApi.departure(_veiculo.id);
+          _veiculo.lastRecord.moment = moment;
+          _veiculo.lastRecord.onGarage = false;
+        }
+      } catch (ex) {}
     });
   }
 
-  void _startStopButtonPressed() {
-    setState(() {
-      if (_stopWatch.isRunning) {
-        _isStart = true;
-        _stopWatch.stop();
-      } else {
-        _isStart = false;
-        _stopWatch.start();
-        _startTimeout();
-      }
-    });
+  void startTimer() {
+    new Timer.periodic(Duration(seconds: 1), 
+      (Timer timer) => setState(() {
+          _current = DateTime.now().difference(_veiculo.lastRecord.moment);
+        },
+      ),
+    );
   }
 
-  void _resetButtonPressed() {
-    if (_stopWatch.isRunning) {
-      _startStopButtonPressed();
+  String _printDuration(Duration duration) {
+    if (duration != null) {
+      String twoDigits(int n) => n.toString().padLeft(2, "0");
+      String twoDigitMinutes = twoDigits(duration.inMinutes.remainder(60));
+      String twoDigitSeconds = twoDigits(duration.inSeconds.remainder(60));
+      return "$twoDigitMinutes:$twoDigitSeconds";
     }
-    setState(() {
-      _stopWatch.reset();
-      _setStopwatchText();
-    });
+    return "";
   }
 
-  void _setStopwatchText() {
-    _stopwatchText =
-        (_stopWatch.elapsed.inMinutes % 60).toString().padLeft(2, '0') +
-            ':' +
-            (_stopWatch.elapsed.inSeconds % 60).toString().padLeft(2, '0');
+  @override
+  void initState() {
+    super.initState();
+    startTimer();
   }
 
   @override
@@ -100,19 +77,19 @@ class _VeiculoTileState extends State<VeiculoTile> {
           child: Row(
             children: <Widget>[
               Icon(
-                veiculo.lastRecord.onGarage ? Icons.arrow_right : Icons.arrow_left,
-                color: veiculo.lastRecord.onGarage ? Colors.green : Colors.red,
+                _veiculo.lastRecord.onGarage ? Icons.arrow_right : Icons.arrow_left,
+                color: _veiculo.lastRecord.onGarage ? Colors.green : Colors.red,
                 size: 35,
               ),
               Container(
                 child: Column(
                   children: <Widget>[
                     Text(
-                      "${veiculo.lastRecord.moment.day.toString()}/${veiculo.lastRecord.moment.month.toString()}", // dia e mes
+                      new DateFormat('dd/MM').format(_veiculo.lastRecord.moment), // dia e mes
                       style: TextStyle(fontSize: 10),
                     ),
                     Text(
-                      "${veiculo.lastRecord.moment.hour.toString()}:${veiculo.lastRecord.moment.minute.toString()}", // horário e minuto
+                      new DateFormat('hh:mm').format(_veiculo.lastRecord.moment), // horário e minuto
                       style:
                           TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
                     ),
@@ -124,7 +101,7 @@ class _VeiculoTileState extends State<VeiculoTile> {
                 child: Column(
                   children: <Widget>[
                     Text(
-                      veiculo.licensePlate,
+                      _veiculo.licensePlate,
                       style: TextStyle(
                           fontSize: 14, fontWeight: FontWeight.bold),
                     ),
@@ -139,7 +116,7 @@ class _VeiculoTileState extends State<VeiculoTile> {
                 child: Container(),
               ),
               Opacity(
-                  opacity: veiculo.lastRecord.onGarage ? 1 : 0,
+                  opacity: _veiculo.lastRecord.onGarage ? 1 : 0,
                   child: Row(
                     children: <Widget>[
                       Container(
@@ -165,7 +142,7 @@ class _VeiculoTileState extends State<VeiculoTile> {
                               stream: clock,
                               builder: (context, snapshot) {
                                 return Text(
-                                  _stopwatchText,
+                                  _printDuration(_current),
                                   style: TextStyle(
                                       fontSize: 12, color: Colors.white),
                                 );
@@ -185,7 +162,7 @@ class _VeiculoTileState extends State<VeiculoTile> {
                       padding: EdgeInsets.all(0),
                       child: Center(
                         child: Text(
-                          !veiculo.lastRecord.onGarage ? 'Entrada' : 'Saida',
+                          !_veiculo.lastRecord.onGarage ? 'Entrada' : 'Saida',
                           style: TextStyle(fontSize: 13),
                         ),
                       ),
