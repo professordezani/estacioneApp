@@ -1,70 +1,37 @@
-import 'package:bubble_showcase/bubble_showcase.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_dash/flutter_dash.dart';
 import 'package:speech_bubble/speech_bubble.dart';
 
 class LogTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      children: <Widget>[
-        Padding(
-          padding: EdgeInsets.fromLTRB(20, 30, 0, 20),
-          child: Column(
-            children: <Widget>[
-              Row(
-                children: <Widget>[
-                  Container(
-                    height: 15,
-                    width: 15,
-                    decoration: BoxDecoration(
-                      color: Color(0xFF3197fd),
-                      shape: BoxShape.circle,
-                    ),
-                  ),
-                ],
-              ),
-              LogContainer(),
-              Row(
-                children: <Widget>[
-                  SizedBox(
-                    width: 7,
-                  ),
-                  Container(
-                    width: 1,
-                    height: 30,
-                    color: Colors.grey,
-                  ),
-                ],
-              ),
-              LogContainer(),
-              LogContainer(),
-              LogContainer(),
-              LogContainer(),
-
-              Row(
-                children: <Widget>[
-                  Container(
-                    height: 15,
-                    width: 15,
-                    decoration: BoxDecoration(
-                      color: Color(0xFF3197fd),
-                      shape: BoxShape.circle,
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        )
-      ],
+    return Padding(
+      padding: const EdgeInsets.all(20),
+      child: FutureBuilder<QuerySnapshot>(
+        future: Firestore.instance.collection("log").getDocuments(),
+        builder: (context, snapshot){
+          if(!snapshot.hasData)
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          else
+            return ListView(
+              children: snapshot.data.documents.map((doc) => LogTile(doc)).toList(),
+            );
+        },
+      ),
     );
   }
 }
 
-class LogContainer extends StatelessWidget {
+
+class LogTile extends StatelessWidget {
+
+  final DocumentSnapshot snapshot;
+  LogTile(this.snapshot);
+
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -104,19 +71,19 @@ class LogContainer extends StatelessWidget {
                 child: Row(
                   children: <Widget>[
                     Icon(
-                      Icons.arrow_left,
-                      color: Colors.red,
+                      snapshot.data['entrada'] ? Icons.arrow_right : Icons.arrow_left,
+                      color: snapshot.data['entrada'] ? Colors.green : Colors.red,
                       size: 35,
                     ),
                     Container(
                       child: Column(
                         children: <Widget>[
                           Text(
-                            '05/07',
+                            snapshot.data['dia'],
                             style: TextStyle(fontSize: 10),
                           ),
                           Text(
-                            '03:41',
+                            snapshot.data['hora'],
                             style: TextStyle(
                                 fontSize: 14, fontWeight: FontWeight.bold),
                           ),
@@ -127,15 +94,16 @@ class LogContainer extends StatelessWidget {
                       width: 20,
                     ),
                     Container(
+                      width: 80,
                       child: Column(
                         children: <Widget>[
                           Text(
-                            'ABC-123',
+                            snapshot.data['placa'],
                             style: TextStyle(
                                 fontSize: 14, fontWeight: FontWeight.bold),
                           ),
                           Text(
-                            'Itamarati #12345',
+                            snapshot.data['empresa'],
                             style: TextStyle(fontSize: 12),
                           ),
                         ],
@@ -171,16 +139,3 @@ class LogContainer extends StatelessWidget {
     );
   }
 }
-
-/*Row(
-children: <Widget>[
-SizedBox(
-width: 8,
-),
-Dash(
-direction: Axis.vertical,
-length: 50,
-dashLength: 100,
-dashColor: Colors.grey),
-],
-),*/
