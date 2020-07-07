@@ -1,20 +1,22 @@
-import 'package:br/datas/veiculo_data.dart';
+import 'package:br/models/vehicle.dart';
 import 'dart:async';
 import 'package:flutter/material.dart';
 
 class VeiculoTile extends StatefulWidget {
-  final VeiculoData veiculo;
+  final String nomeEmpresa;
+  final Vehicle veiculo;
 
-  VeiculoTile(this.veiculo);
+  VeiculoTile(this.nomeEmpresa, this.veiculo);
 
   @override
-  _VeiculoTileState createState() => _VeiculoTileState(veiculo);
+  _VeiculoTileState createState() => _VeiculoTileState(nomeEmpresa, veiculo);
 }
 
 class _VeiculoTileState extends State<VeiculoTile> {
-  final VeiculoData veiculo;
-
-  _VeiculoTileState(this.veiculo);
+  final String nomeEmpresa;
+  final Vehicle veiculo;
+  
+  _VeiculoTileState(this.nomeEmpresa, this.veiculo);
 
   bool _isStart = true;
   String _stopwatchText = '00:00';
@@ -78,19 +80,19 @@ class _VeiculoTileState extends State<VeiculoTile> {
           child: Row(
             children: <Widget>[
               Icon(
-                veiculo.veiculoStatus ? Icons.arrow_left : Icons.arrow_right,
-                color: veiculo.veiculoStatus ? Colors.red : Colors.green,
+                veiculo.lastRecord.onGarage ? Icons.arrow_right : Icons.arrow_left,
+                color: veiculo.lastRecord.onGarage ? Colors.red : Colors.green,
                 size: 35,
               ),
               Container(
                 child: Column(
                   children: <Widget>[
                     Text(
-                      veiculo.entrada,
+                      "${veiculo.lastRecord.moment.day.toString()}/${veiculo.lastRecord.moment.month.toString()}", // dia e mes
                       style: TextStyle(fontSize: 10),
                     ),
                     Text(
-                      veiculo.saida,
+                      "${veiculo.lastRecord.moment.hour.toString()}:${veiculo.lastRecord.moment.minute.toString()}", // horário e minuto
                       style:
                           TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
                     ),
@@ -102,12 +104,12 @@ class _VeiculoTileState extends State<VeiculoTile> {
                 child: Column(
                   children: <Widget>[
                     Text(
-                      veiculo.placa,
+                      veiculo.licensePlate,
                       style: TextStyle(
                           fontSize: 14, fontWeight: FontWeight.bold),
                     ),
                     Text(
-                      veiculo.empresa,
+                      nomeEmpresa,
                       style: TextStyle(fontSize: 12),
                     ),
                   ],
@@ -117,7 +119,7 @@ class _VeiculoTileState extends State<VeiculoTile> {
                 child: Container(),
               ),
               Opacity(
-                  opacity: veiculo.veiculoStatus ? 1 : 0,
+                  opacity: veiculo.lastRecord.onGarage ? 1 : 0,
                   child: Row(
                     children: <Widget>[
                       Container(
@@ -163,7 +165,7 @@ class _VeiculoTileState extends State<VeiculoTile> {
                       padding: EdgeInsets.all(0),
                       child: Center(
                         child: Text(
-                          !veiculo.veiculoStatus ? 'Entrada' : 'Saida',
+                          !veiculo.lastRecord.onGarage ? 'Entrada' : 'Saida',
                           style: TextStyle(fontSize: 13),
                         ),
                       ),

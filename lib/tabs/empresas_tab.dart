@@ -1,5 +1,6 @@
+import '../models/company.dart';
+import '../endpoints/company_api.dart';
 import 'package:br/tiles/empresas_tile.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_switch/flutter_switch.dart';
@@ -12,6 +13,13 @@ class EmpresasTab extends StatefulWidget {
 class _EmpresasTabState extends State<EmpresasTab> {
   bool filtro = false;
   bool checkedValue;
+  Future<List<Company>> companies;
+
+  @override
+  void initState() {
+    super.initState();
+    companies = CompanyApi().getCompanies();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -96,10 +104,8 @@ class _EmpresasTabState extends State<EmpresasTab> {
                   )),
               Expanded(
                   flex: 8,
-                  child: FutureBuilder<QuerySnapshot>(
-                    future: Firestore.instance
-                        .collection("empresas")
-                        .getDocuments(),
+                  child: FutureBuilder<List<Company>>(
+                    future: companies,
                     builder: (context, snapshot) {
                       if (!snapshot.hasData)
                         return Center(
@@ -107,9 +113,9 @@ class _EmpresasTabState extends State<EmpresasTab> {
                         );
                       else
                         return ListView(
-                          children: snapshot.data.documents
-                              .map((doc) => EmpresasTile(doc))
-                              .toList(),
+                          children: snapshot.data
+                            .map((company) => EmpresasTile(company))
+                            .toList(),
                         );
                     },
                   )),

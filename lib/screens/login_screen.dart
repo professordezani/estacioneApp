@@ -1,6 +1,4 @@
 import 'package:br/models/user_model.dart';
-import 'package:br/screens/dashboard_screen.dart';
-import 'package:br/screens/singup_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:scoped_model/scoped_model.dart';
@@ -25,20 +23,7 @@ class _LoginScreenState extends State<LoginScreen> {
       key: _scaffoldKey,
         appBar: AppBar(
           title: Text("Entrar"),
-          centerTitle: true,
-          actions: <Widget>[
-            FlatButton(
-              child: Text(
-                "Criar conta",
-                style: TextStyle(fontSize: 15),
-              ),
-              textColor: Colors.white,
-              onPressed: () {
-                Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => SingUpScreen()));
-              },
-            )
-          ],
+          centerTitle: true
         ),
         body: ScopedModelDescendant<UserModel>(
           builder: (context, child, model) {
@@ -84,14 +69,13 @@ class _LoginScreenState extends State<LoginScreen> {
                       color: Theme.of(context).primaryColor,
                       onPressed: () {
                         if (_formKey.currentState.validate()) {
-
-                        }
-                        model.signIn(
+                          model.signIn(
                             email: _emailController.text,
-                            pass: _passController.text,
+                            password: _passController.text,
                             onSuccess: _onSuccess,
                             onFail: _onFail
-                        );
+                          );
+                        }
                       },
                     ),
                   )
@@ -108,7 +92,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   void _onFail() {
     _scaffoldKey.currentState.showSnackBar(SnackBar(
-      content: Text("Falha ao Entrar!"),
+      content: Text("Falha na autenticação"),
       backgroundColor: Colors.redAccent,
       duration: Duration(seconds: 2),
     ));

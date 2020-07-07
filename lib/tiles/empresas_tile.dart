@@ -1,12 +1,12 @@
-import 'file:///D:/app/catraca_app/lib/tabs/veiculos_tab.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import '../tabs/veiculos_tab.dart';
+import '../models/company.dart';
 import 'package:flutter/material.dart';
 
 class EmpresasTile extends StatelessWidget {
 
-  final DocumentSnapshot snapshot;
+  final Company company;
 
-  EmpresasTile(this.snapshot);
+  EmpresasTile(this.company);
 
   @override
   Widget build(BuildContext context) {
@@ -26,14 +26,14 @@ class EmpresasTile extends StatelessWidget {
                       shape: BoxShape.circle,
                       image: new DecorationImage(
                           fit: BoxFit.fill,
-                          image: new NetworkImage(snapshot.data['image'])
+                          image: new NetworkImage(company.thumbnail)
                       )
                   ),
                 ),
-                Text(snapshot.data['name'],)
+                Text(company.name)
               ],
             ),
-            VeiculosTile(snapshot)
+            VeiculosTile(company)
           ],)
     );
   }

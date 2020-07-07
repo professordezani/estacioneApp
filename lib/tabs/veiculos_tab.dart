@@ -1,30 +1,30 @@
-import 'package:br/datas/veiculo_data.dart';
+import '../models/vehicle.dart';
+import '../models/company.dart';
+import '../endpoints/company_api.dart';
 import 'package:br/tiles/veiculo_tile.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class VeiculosTile extends StatelessWidget {
-  final DocumentSnapshot snapshot;
+  final Company company;
+  Future<List<Vehicle>> vehicles;
 
-  VeiculosTile(this.snapshot);
+  VeiculosTile(this.company) {
+    vehicles = CompanyApi().getFleet(company.id);
+  }
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<QuerySnapshot>(
-      future: Firestore.instance
-          .collection('empresas')
-          .document(snapshot.documentID)
-          .collection('veiculos')
-          .getDocuments(),
+    return FutureBuilder<List<Vehicle>>(
+      future: vehicles,
       builder: (contex, snapshot) {
         if(!snapshot.hasData) return Center(child: CircularProgressIndicator(),);
         return Container(
             child: ListView.builder(
               scrollDirection: Axis.vertical,
               shrinkWrap: true,
-              itemCount: snapshot.data.documents.length,
+              itemCount: snapshot.data.length,
               itemBuilder: (context, index) {
-                return VeiculoTile(VeiculoData.fromDocuments(snapshot.data.documents[index]));
+                return VeiculoTile(company.name, snapshot.data[index]);
               },
             )
         );

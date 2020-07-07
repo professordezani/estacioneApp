@@ -26,8 +26,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   'https://firebasestorage.googleapis.com/v0/b/appcatraca-75f27.appspot.com/o/user.png?alt=media&token=f5350349-726e-4a01-af20-58a6d783ef57'),
             ),
             title: Text(
-              "${model.userData['role']} \n"
-                  "${model.userData['name']}",
+              "${model.currentUser.role} \n"
+              "${model.currentUser.name}",
               style: TextStyle(fontSize: 15),
             ),
             actions: <Widget>[
